@@ -147,6 +147,6 @@ RSF requires a formal language beyond first-order logic, incorporating:
 
 ## References
 
-- Doran, M. A. (2025). *Recursive Shape-Structured Notation (RSSN)*. *Journal of Advanced Mathematical Structures*, 12(2), 143-192.  
-- Doran, M. A. (2025). *Fractal Tensor Calculus (FTC): A complete reformulation of tensor calculus using fractal recursion and emergent geometry principles*. *Physical Review D*, 101(8), 084021.  
-- Doran, M. A. (2025). *Unified Fractal Theory of Infinity: Replacing Cardinality with Recursive Density*. *Journal of Mathematical Logic*, 25(3), 302-349.
+- Doran, M. A. (2025). *Recursive Shape-Structured Notation (RSSN)  
+- Doran, M. A. (2025). *Fractal Tensor Calculus (FTC): A complete reformulation of tensor calculus using fractal recursion and emergent geometry principles*. 
+- Doran, M. A. (2025). *Unified Fractal Theory of Infinity: Replacing Cardinality with Recursive Density*. 
