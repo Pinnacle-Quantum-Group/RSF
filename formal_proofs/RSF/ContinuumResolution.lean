@@ -24,11 +24,7 @@ theorem L4_1_spectrum_dense_in_unit :
 
 theorem L4_1_one_over_n_approaches_zero :
     Tendsto (fun n : ℕ => (1 : ℝ) / ↑(n + 1)) atTop (nhds 0) := by
-  -- NOTE: `tendsto_const_div_atTop_nhds_zero_nat` gives the limit for `↑n`
-  -- but the goal uses `↑(n+1)`. They have the same atTop limit by composing
-  -- with the atTop-preserving `(·+1) : ℕ → ℕ`. Stubbed pending the v4.5.0
-  -- name of that composition lemma.
-  sorry
+  simpa using tendsto_one_div_add_atTop_nhds_zero_nat
 
 theorem L4_1_spectrum_contains_rationals :
     ∀ n : ℕ, 0 < n → (1 : ℝ) / ↑n ∈ densitySpectrum :=
