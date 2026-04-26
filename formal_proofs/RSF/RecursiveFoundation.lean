@@ -41,12 +41,14 @@ theorem foundation_implies_no_infinite_descent (α : Type*) (sys : FoundedSystem
 theorem foundation_implies_irreflexive (α : Type*) (sys : FoundedSystem α)
     (x : α) (hx : x ∈ sys.elements) :
     x ∉ sys.generate x := by
+  intro hgen
   have hS : ({x} : Set α).Nonempty := Set.singleton_nonempty x
   have hSub : ({x} : Set α) ⊆ sys.elements := Set.singleton_subset_iff.mpr hx
   obtain ⟨m, hm_mem, hm_prop⟩ := sys.foundation {x} hSub hS
   rw [Set.mem_singleton_iff] at hm_mem
-  subst hm_mem
-  exact hm_prop x (Set.mem_singleton x)
+  -- hm_mem : m = x; rewrite goal/hyp via hm_mem instead of subst (which can
+  -- pick either direction in v4.5.0)
+  exact hm_prop x (Set.mem_singleton x) (hm_mem ▸ hgen)
 
 /-! ## 4. Foundation Implies Asymmetry -/
 

@@ -11,6 +11,7 @@ import Mathlib
 
 noncomputable section
 open Set Filter Topology
+open Classical  -- for DecidablePred on (· ∈ S) in Finset.filter
 
 namespace RSF.CardinalityTranscendence
 
@@ -33,10 +34,12 @@ theorem L2_1_density_non_collapse :
     ∃ (S T : Set ℕ), S.Countable ∧ T.Countable ∧
     ¬(∀ f : ℕ → ℝ, Tendsto (naturalDensity S) atTop (nhds (f 0)) →
       Tendsto (naturalDensity T) atTop (nhds (f 0))) := by
-  exact ⟨{n | Even n}, {n | 0 < n}, Set.countable_of_injective_of_countable_range
-    (fun n => 2 * n) (fun a b h => by omega) ⟨fun n => ⟨2*n, rfl⟩⟩ |>.2 sorry,
-    Set.countable_of_injective_of_countable_range id Function.injective_id sorry |>.2 sorry,
-    sorry⟩
+  -- NOTE: original used non-existent `Set.countable_of_injective_of_countable_range`.
+  -- For ℕ-subsets, both witnesses are Countable via `Set.to_countable`; the third
+  -- conjunct is the actual mathematical claim and is left as sorry pending a full
+  -- proof using `even_density_half` and `successor_density_one`.
+  exact ⟨{n | Even n}, {n | 0 < n}, ({n | Even n} : Set ℕ).to_countable,
+    ({n | 0 < n} : Set ℕ).to_countable, sorry⟩
 
 /-! ## L2.2 — No Hidden Hierarchy
     Dyadic rationals {k/2^n} have high density but are countable.
