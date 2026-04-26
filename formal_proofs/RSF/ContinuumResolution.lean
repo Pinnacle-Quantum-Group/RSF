@@ -42,6 +42,21 @@ theorem L4_1_spectrum_contains_rationals :
     ∀ n : ℕ, 0 < n → (1 : ℝ) / ↑n ∈ densitySpectrum :=
   fun n hn => ⟨n, hn, rfl⟩
 
+/-- The actual mathematical content of the harmonic-spectrum density:
+    `{1/n}` accumulates at 0. For every ε > 0 there is some `1/n` in
+    the spectrum with `1/n < ε`. This is the TRUE statement that the
+    false-as-written `L4_1_spectrum_dense_in_unit` was trying to capture
+    — the spectrum is dense **at 0**, not in (0, 1]. The Möbius/cylinder
+    parallel to RLA: the validator-level catch is "you said dense in
+    (0, 1] but only dense at 0"; this theorem restates the corrected
+    claim positively. -/
+theorem densitySpectrum_accumulates_at_zero (ε : ℝ) (hε : 0 < ε) :
+    ∃ d ∈ densitySpectrum, d < ε := by
+  -- Pick n with 1/(n+1) < ε via the Archimedean property.
+  obtain ⟨n, hn⟩ := exists_nat_one_div_lt hε
+  refine ⟨1 / (↑(n + 1) : ℝ), ⟨n + 1, Nat.succ_pos _, rfl⟩, ?_⟩
+  exact_mod_cast hn
+
 theorem L4_1_density_between (a b : ℝ) (ha : 0 < a) (hab : a < b) (hb : b ≤ 1) :
     ∃ d ∈ densitySpectrum, a < d ∧ d < b := by
   -- FALSE as stated; see NOTE on densitySpectrum above.

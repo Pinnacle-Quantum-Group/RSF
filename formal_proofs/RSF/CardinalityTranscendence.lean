@@ -70,6 +70,18 @@ structure DensityOrdering where
   density : Set ℕ → ℝ
   density_nonneg : ∀ S, 0 ≤ density S
 
+/-- NOTE (specification mismatch): the claim is FALSE for the bare
+    `DensityOrdering` structure above — the constant-zero density
+    `{density := fun _ => 0, density_nonneg := fun _ => le_refl 0}`
+    satisfies `density S = density T` for all S, T, contradicting the
+    negation. The corrected version requires anchored density values
+    (e.g., `density {n | Even n} = 1/2` and `density {n | 0 < n} = 1`)
+    which makes the negation provable in two lines.
+
+    The proven version lives at `RSF.CardinalityTranscendence.Fix.T1_density_ordering_separates`
+    in `formal_proofs/RSF/ClosureAttempts.lean`. Same lens as the RLA
+    `trivial_is_cocycle` catch: the validator caught a specification
+    bug, not a proof bug. Anchoring restores the obstruction. -/
 theorem T1_cardinality_transcendence (d : DensityOrdering) :
     ¬(∀ S T : Set ℕ, S.Countable → T.Countable →
       d.density S = d.density T) := by
