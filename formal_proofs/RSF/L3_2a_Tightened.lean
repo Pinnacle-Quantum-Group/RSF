@@ -46,7 +46,7 @@ lemma limit_lipschitz_on (lc : LipschitzCurvature) (S : Set ℝ)
     (hpw x hx).sub (hpw y hy)
   have h_abs : Tendsto (fun n => |lc.R n x - lc.R n y|) atTop
                 (nhds |lc.R_cl x - lc.R_cl y|) := h_diff.abs
-  exact le_of_tendsto h_abs (Filter.Eventually.of_forall (fun n => lc.lipschitz n x y))
+  exact le_of_tendsto h_abs (Filter.eventually_of_forall (fun n => lc.lipschitz n x y))
 
 
 /-! ## Step 2/3 — finite grid construction with explicit spacing bound. -/

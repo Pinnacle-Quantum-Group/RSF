@@ -33,10 +33,7 @@ structure DensityOrdering' where
 
 /-- Any subset of ℕ is countable. -/
 private lemma setNat_countable (S : Set ℕ) : S.Countable :=
-  S.toCountable
-  -- NEEDS_VERIFICATION: in current Mathlib the exact name might be
-  -- `Set.toCountable` (lowercase t) or `Set.Countable.of_subtype`.
-  -- Either way, this is the one-liner.
+  S.to_countable
 
 /-- T1 holds for anchored orderings. -/
 theorem T1_density_ordering_separates (d : DensityOrdering') :
@@ -125,10 +122,7 @@ lemma limit_lipschitz (lc : LipschitzCurvature)
   have h_abs : Tendsto (fun n => |lc.R n x - lc.R n y|) atTop
                 (nhds |lc.R_cl x - lc.R_cl y|) := h_diff.abs
   -- Each term is bounded by K|x − y|; the limit inherits the bound.
-  exact le_of_tendsto h_abs (Filter.Eventually.of_forall (fun n => lc.lipschitz n x y))
-  -- NEEDS_VERIFICATION: `Tendsto.abs` may be `Filter.Tendsto.abs` or require
-  -- `Continuous.tendsto continuous_abs |>.comp h_diff`. Both are equivalent;
-  -- exact name varies by Mathlib version.
+  exact le_of_tendsto h_abs (Filter.eventually_of_forall (fun n => lc.lipschitz n x y))
 
 /-- L3.2a: uniform convergence on the compact interval [a,b]. -/
 theorem L3_2a_uniform_on_compact (lc : LipschitzCurvature)
