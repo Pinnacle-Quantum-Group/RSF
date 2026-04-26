@@ -46,7 +46,7 @@ lemma limit_lipschitz_on (lc : LipschitzCurvature) (S : Set ℝ)
     (hpw x hx).sub (hpw y hy)
   have h_abs : Tendsto (fun n => |lc.R n x - lc.R n y|) atTop
                 (nhds |lc.R_cl x - lc.R_cl y|) := h_diff.abs
-  exact le_of_tendsto h_abs (Filter.Eventually.of_forall (fun n => lc.lipschitz n x y))
+  exact le_of_tendsto h_abs (Filter.eventually_of_forall (fun n => lc.lipschitz n x y))
 
 
 /-! ## Step 2/3 — finite grid construction with explicit spacing bound. -/
@@ -84,11 +84,11 @@ private lemma gridSpacing_le (a b δ : ℝ) (hab : a < b) (hδ : 0 < δ) :
       show (⌈(b - a) / δ⌉₊ : ℝ) < ((⌈(b - a) / δ⌉₊ + 1 : ℕ) : ℝ)
       push_cast; linarith
     linarith
+  -- After `div_le_iff hM_R`, goal becomes `b - a ≤ δ * ↑M`.
   rw [div_le_iff hM_R]
-  have : (b - a) / δ * δ = b - a := by field_simp
-  calc b - a = (b - a) / δ * δ := by field_simp
-    _ ≤ (M : ℝ) * δ := by
-        exact mul_le_mul_of_nonneg_right (le_of_lt h_M_gt) (le_of_lt hδ)
+  calc b - a = δ * ((b - a) / δ) := by field_simp; ring
+    _ ≤ δ * (M : ℝ) :=
+        mul_le_mul_of_nonneg_left (le_of_lt h_M_gt) (le_of_lt hδ)
 
 
 /-! ## Step 4 — nearest grid point exists with explicit bound. -/
@@ -160,7 +160,11 @@ theorem L3_2a_uniform_on_compact (lc : LipschitzCurvature)
   intro ε hε
   set δ : ℝ := ε / (3 * lc.K) with hδ_def
   have hδ_pos : 0 < δ := div_pos hε (by linarith [lc.hK])
-  have hKδ : lc.K * δ = ε / 3 := by rw [hδ_def]; field_simp
+  have hKne : lc.K ≠ 0 := ne_of_gt lc.hK
+  have hKδ : lc.K * δ = ε / 3 := by
+    show lc.K * (ε / (3 * lc.K)) = ε / 3
+    rw [mul_div_assoc', mul_comm (3 : ℝ) lc.K]
+    exact mul_div_mul_left ε 3 hKne
   -- Degenerate case: a = b
   rcases eq_or_lt_of_le hab with hab_eq | hab_lt
   · subst hab_eq
@@ -239,8 +243,6 @@ theorem L3_2a_uniform_on_compact (lc : LipschitzCurvature)
             apply le_trans (abs_add _ _)
             exact add_le_add_right (abs_add _ _) _
       _ < ε / 3 + ε / 3 + ε / 3 := by
-            have := add_lt_add_of_le_of_lt
-              (add_le_add h_piece1 (le_refl _) : _ ≤ ε/3 + _) h_piece3
             linarith [h_piece1, h_piece2, h_piece3]
       _ = ε := by ring
 

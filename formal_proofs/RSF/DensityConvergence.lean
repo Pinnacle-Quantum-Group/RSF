@@ -25,8 +25,9 @@ structure DensitySeq where
 theorem monotone_decreasing_density_converges (d : DensitySeq)
     (hmono : Antitone d.val) :
     ∃ L : ℝ, Tendsto d.val atTop (nhds L) ∧ 0 ≤ L ∧ L ≤ 1 := by
+  -- ℝ is ConditionallyCompleteLattice, not CompleteLattice — use the c-versions.
   have hbdd : BddBelow (Set.range d.val) := ⟨0, by rintro _ ⟨n, rfl⟩; exact d.nonneg n⟩
-  refine ⟨iInf d.val, tendsto_atTop_iInf hmono, ?_, ?_⟩
+  refine ⟨iInf d.val, tendsto_atTop_ciInf hmono hbdd, ?_, ?_⟩
   · exact le_ciInf fun n => d.nonneg n
   · exact ciInf_le_of_le hbdd 0 (d.bounded 0)
 
@@ -34,7 +35,7 @@ theorem monotone_increasing_density_converges (d : DensitySeq)
     (hmono : Monotone d.val) :
     ∃ L : ℝ, Tendsto d.val atTop (nhds L) ∧ 0 ≤ L ∧ L ≤ 1 := by
   have hbdd : BddAbove (Set.range d.val) := ⟨1, by rintro _ ⟨n, rfl⟩; exact d.bounded n⟩
-  refine ⟨iSup d.val, tendsto_atTop_iSup hmono, ?_, ?_⟩
+  refine ⟨iSup d.val, tendsto_atTop_ciSup hmono hbdd, ?_, ?_⟩
   · exact le_csSup_of_le hbdd ⟨0, rfl⟩ (d.nonneg 0)
   · exact ciSup_le fun n => d.bounded n
 
@@ -42,9 +43,9 @@ theorem monotone_increasing_density_converges (d : DensitySeq)
 
 theorem cauchy_density_converges (d : DensitySeq)
     (hcauchy : CauchySeq d.val) :
-    ∃ L : ℝ, Tendsto d.val atTop (nhds L) := by
-  exact cauchySeq_tendsto_of_isComplete isComplete_univ
-    (fun n => Set.mem_univ _) hcauchy |>.imp fun L hL => hL.2
+    ∃ L : ℝ, Tendsto d.val atTop (nhds L) :=
+  -- ℝ is a CompleteSpace; CauchySeq directly converges
+  cauchySeq_tendsto_of_complete hcauchy
 
 /-! ## 4. Limit Inherits Bounds -/
 
