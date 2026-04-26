@@ -62,10 +62,14 @@ theorem foundation_implies_asymmetric (α : Type*) (sys : FoundedSystem α)
     · exact hx
     · exact Set.mem_singleton_iff.mp h ▸ hy
   obtain ⟨m, hm_mem, hm_prop⟩ := sys.foundation {x, y} hSub hS
-  rcases Set.mem_insert_iff.mp hm_mem with rfl | h
-  · exact hm_prop y (Set.mem_insert_of_mem x (Set.mem_singleton y)) hyx
-  · rw [Set.mem_singleton_iff] at h; subst h
-    exact hm_prop x (Set.mem_insert x {y}) hxy
+  -- Avoid `subst`/`rfl` patterns that pick the wrong direction in v4.5.0;
+  -- use explicit ▸ rewriting instead.
+  rcases Set.mem_insert_iff.mp hm_mem with hmx | h
+  · -- hmx : m = x
+    exact hm_prop y (Set.mem_insert_of_mem x (Set.mem_singleton y)) (hmx ▸ hyx)
+  · rw [Set.mem_singleton_iff] at h
+    -- h : m = y
+    exact hm_prop x (Set.mem_insert x {y}) (h ▸ hxy)
 
 /-! ## 5. Structural Induction Principle -/
 

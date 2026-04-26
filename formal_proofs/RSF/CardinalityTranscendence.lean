@@ -11,7 +11,11 @@ import Mathlib
 
 noncomputable section
 open Set Filter Topology
-open Classical  -- for DecidablePred on (· ∈ S) in Finset.filter
+
+-- Make every Prop decidable in this file so `Finset.filter` over arbitrary
+-- predicates (e.g. `(· ∈ S)` for `S : Set ℕ`) elaborates without explicit
+-- DecidablePred witnesses. Local-only.
+attribute [local instance] Classical.propDecidable
 
 namespace RSF.CardinalityTranscendence
 

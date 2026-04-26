@@ -86,7 +86,7 @@ private lemma gridSpacing_le (a b δ : ℝ) (hab : a < b) (hδ : 0 < δ) :
     linarith
   -- After `div_le_iff hM_R`, goal becomes `b - a ≤ δ * ↑M`.
   rw [div_le_iff hM_R]
-  calc b - a = δ * ((b - a) / δ) := by field_simp
+  calc b - a = δ * ((b - a) / δ) := by field_simp; ring
     _ ≤ δ * (M : ℝ) :=
         mul_le_mul_of_nonneg_left (le_of_lt h_M_gt) (le_of_lt hδ)
 
