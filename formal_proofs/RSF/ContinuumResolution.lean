@@ -14,12 +14,24 @@ open Set Filter Topology
 
 namespace RSF.ContinuumResolution
 
-/-! ## L4.1 — Density Spectrum Dense -/
+/-! ## L4.1 — Density Spectrum Dense
+
+    NOTE (specification mismatch): the definition below restricts the
+    spectrum to `{1/n : n ≥ 1} = {1, 1/2, 1/3, …}`, which accumulates
+    only at 0 and is therefore **not dense in (0, 1]** — counterexample:
+    the open interval (0.4, 0.5) contains no `1/n`. The dense-spectrum
+    claims below (`L4_1_spectrum_dense_in_unit`, `L4_1_density_between`,
+    `L4_2_density_spectrum_no_jumps`) cannot be proved with this
+    definition. The corrected version uses ℚ ∩ (0, 1] and lives in
+    `ClosureAttempts.lean` as `densitySpectrum'` with the matching
+    `L4_1_density_between` proof. Stubbed pending alignment of this
+    file with the corrected spectrum definition. -/
 
 def densitySpectrum : Set ℝ := {x | ∃ n : ℕ, 0 < n ∧ x = 1 / ↑n}
 
 theorem L4_1_spectrum_dense_in_unit :
     Dense (densitySpectrum ∩ Set.Ioo 0 1) := by
+  -- FALSE as stated; see NOTE above.
   sorry
 
 theorem L4_1_one_over_n_approaches_zero :
@@ -32,6 +44,10 @@ theorem L4_1_spectrum_contains_rationals :
 
 theorem L4_1_density_between (a b : ℝ) (ha : 0 < a) (hab : a < b) (hb : b ≤ 1) :
     ∃ d ∈ densitySpectrum, a < d ∧ d < b := by
+  -- FALSE as stated; see NOTE on densitySpectrum above.
+  -- Counterexample: a = 0.4, b = 0.5 — no `1/n` lies in (0.4, 0.5).
+  -- The corrected `L4_1_density_between` over ℚ ∩ (0, 1] is proved in
+  -- ClosureAttempts.lean using `exists_rat_btwn`.
   sorry
 
 /-! ## L4.2 — CH Dissolution
@@ -51,6 +67,9 @@ theorem L4_2_no_gap (a b : ℝ) (ha : 0 < a) (hab : a < b) :
 theorem L4_2_density_spectrum_no_jumps :
     ∀ x ∈ Set.Ioo (0 : ℝ) 1, ∀ ε > 0,
     ∃ d ∈ densitySpectrum, |d - x| < ε := by
+  -- FALSE as stated; see NOTE on densitySpectrum above. Take x = 0.45,
+  -- ε = 0.04: nearest `1/n` are 1/2 = 0.5 and 1/3 ≈ 0.333; both more
+  -- than 0.04 away. Holds with the corrected ℚ-spectrum.
   sorry
 
 /-! ## Theorem T2 — Continuum Resolution
